@@ -1,14 +1,25 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
+    <ion-title> Admin Dashboard </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+
+  <h2 style="text-align:center;">Product Register</h2>
+
+  <ion-item>
+    <ion-label stacked>Barcode: </ion-label>
+    <ion-input type="text" #barcode></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label stacked>Name: </ion-label>
+    <ion-input type="text" #name></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label stacked>Description: </ion-label>
+    <ion-input type="text" #description></ion-input>
+  </ion-item>
+
+  <button ion-button block (click)="register()">Register</button>
 </ion-content>
