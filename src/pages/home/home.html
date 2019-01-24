@@ -1,12 +1,9 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title> Admin Dashboard </ion-title>
-  </ion-navbar>
+  <ion-navbar> <ion-title> Admin Dashboard </ion-title> </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-
-  <h2 style="text-align:center;">Product Register</h2>
+  <h2 style="text-align:center;">Upload Product</h2>
 
   <ion-item>
     <ion-label stacked>Barcode: </ion-label>
@@ -20,6 +17,15 @@
     <ion-label stacked>Description: </ion-label>
     <ion-input type="text" #description></ion-input>
   </ion-item>
+  <ion-item>
+    <ion-label stacked>Product Picture: </ion-label>
+    <ion-input
+      type="file"
+      #picture
+      (change)="handleFileInput($event.target.files)"
+      class="hidden"
+    ></ion-input>
+  </ion-item>
 
-  <button ion-button block (click)="register()">Register</button>
+  <button ion-button block (click)="register()">Upload</button>
 </ion-content>

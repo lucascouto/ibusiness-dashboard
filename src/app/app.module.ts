@@ -13,7 +13,8 @@ import {
   AngularFireDatabase
 } from "@angular/fire/database";
 import { AngularFireAuthModule } from "@angular/fire/auth";
-import { AngularFirestoreModule, AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestoreModule } from "angularfire2/firestore";
+import { LoginPage } from "../pages/login/login";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyBthU9q7uf48uH3_P0pMDEThgbE98PR-DA",
@@ -25,7 +26,7 @@ export const firebaseConfig = {
 };
 
 @NgModule({
-  declarations: [MyApp, HomePage],
+  declarations: [MyApp, HomePage, LoginPage],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
@@ -35,7 +36,7 @@ export const firebaseConfig = {
     AngularFirestoreModule
   ],
   bootstrap: [IonicApp],
-  entryComponents: [MyApp, HomePage],
+  entryComponents: [MyApp, HomePage, LoginPage],
   providers: [
     StatusBar,
     SplashScreen,
@@ -43,4 +44,4 @@ export const firebaseConfig = {
     { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })
-export class AppModule { }
+export class AppModule {}

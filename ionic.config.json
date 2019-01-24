@@ -1,5 +1,7 @@
 {
   "name": "IonicCrud",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "ionic-angular"
 }
