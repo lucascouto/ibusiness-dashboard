@@ -4,28 +4,31 @@
 
 <ion-content padding>
   <h2 style="text-align:center;">Upload Product</h2>
+  <ion-card>
+    <ion-card-content>
+      <ion-item>
+        <ion-label stacked>Barcode: </ion-label>
+        <ion-input type="number" #barcode></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Name: </ion-label>
+        <ion-input type="text" #name></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Description: </ion-label>
+        <ion-input type="text" #description></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Product Picture: </ion-label>
+        <ion-input
+          type="file"
+          #picture
+          (change)="handleFileInput($event.target.files)"
+          class="hidden"
+        ></ion-input>
+      </ion-item>
 
-  <ion-item>
-    <ion-label stacked>Barcode: </ion-label>
-    <ion-input type="text" #barcode></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label stacked>Name: </ion-label>
-    <ion-input type="text" #name></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label stacked>Description: </ion-label>
-    <ion-input type="text" #description></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label stacked>Product Picture: </ion-label>
-    <ion-input
-      type="file"
-      #picture
-      (change)="handleFileInput($event.target.files)"
-      class="hidden"
-    ></ion-input>
-  </ion-item>
-
-  <button ion-button block (click)="register()">Upload</button>
+      <button ion-button block (click)="register()">Upload</button>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
