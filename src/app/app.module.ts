@@ -20,6 +20,8 @@ import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AngularFirestoreModule } from "angularfire2/firestore";
 
 import { FormsModule } from "@angular/forms";
+import { ProductsPage } from "../pages/products/products";
+import { TabsPage } from "../pages/tabs/tabs";
 
 /* ENVIROMENT VARIABLE TO FIREBASE INSTANCE */
 export const firebaseConfig = {
@@ -32,7 +34,7 @@ export const firebaseConfig = {
 };
 
 @NgModule({
-  declarations: [MyApp, HomePage, LoginPage],
+  declarations: [MyApp, HomePage, LoginPage, ProductsPage, TabsPage],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
@@ -43,7 +45,7 @@ export const firebaseConfig = {
     FormsModule
   ],
   bootstrap: [IonicApp],
-  entryComponents: [MyApp, HomePage, LoginPage],
+  entryComponents: [MyApp, HomePage, LoginPage, ProductsPage, TabsPage],
   providers: [
     StatusBar,
     SplashScreen,

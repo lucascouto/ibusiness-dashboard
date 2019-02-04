@@ -125,6 +125,10 @@ export class HomePage {
   }
 
   read(bstr: string) {
+    let toast = this.toastCtrl.create({ duration: 3000, position: "bottom" });
+
+    let collection = this.collection;
+
     /* read workbook */
     const wb: XLSX.WorkBook = XLSX.read(bstr, { type: "binary" });
 
@@ -136,25 +140,80 @@ export class HomePage {
     /* save data */
     this.dataExcel = <AOA>XLSX.utils.sheet_to_json(ws, { header: 1 });
     console.log(this.dataExcel);
+    let rowNumber = 1;
     for (let row of this.dataExcel) {
-      this.collection.add({
-        barcode: row[0],
-        name: row[1],
-        description: row[2]
-      });
-      console.log(row[3]);
-      imageToBinary(row[3], function(err, data) {
-        if (data != undefined) {
-          console.log(data);
-          storage
-            .child("barcodes/" + row[0] + ".jpg")
-            .putString(data.dataUri, "data_url")
-            .then(function(snapshot) {
-              console.log("upload a file!");
+      this.barcode_found = this.fireStore.collection("products", ref =>
+        ref.where("barcode", "==", row[0])
+      );
+      this.barcode_found
+        .get()
+        .toPromise()
+        .then(function(querySnapshot) {
+          //CHECKS THE BARCODE!
+          if (!querySnapshot.empty) {
+            console.log(
+              "The product with the barcode",
+              row[0],
+              "in the line",
+              rowNumber,
+              "already exists"
+            );
+            toast.setMessage(
+              "The file was not uploaded... Please, check the log!"
+            );
+          }
+          //THEN, CHECKS IF THE NAME IS EMPTY
+          else if (row[1] == undefined) {
+            console.log("The product name in row ", rowNumber, "is empty!");
+            toast.setMessage(
+              "The file was not uploaded... Please, check the log!"
+            );
+          }
+          //THEN CHECKS IF THE DESCRIPTION IS EMPTY
+          else if (row[2] == undefined) {
+            console.log(
+              "The product description in row ",
+              rowNumber,
+              "is empty!"
+            );
+            toast.setMessage(
+              "The file was not uploaded... Please, check the log!"
+            );
+          }
+          //THEN CHECKS IF THE IMAGE LINK EXISTS
+          else if (row[3] == undefined) {
+            console.log(
+              "The product in row ",
+              rowNumber,
+              "doesn't have a link to an image!"
+            );
+            toast.setMessage(
+              "The file was not uploaded... Please, check the log!"
+            );
+          }
+          //IF EVERYTHING IS OKAY, UPLOAD THE EXCEL FILE
+          else {
+            collection.add({
+              barcode: row[0],
+              name: row[1],
+              description: row[2]
             });
-        } else {
-        }
-      });
+            imageToBinary(row[3], function(err, data) {
+              console.log(data);
+              storage
+                .child("barcodes/" + row[0] + ".jpg")
+                .putString(data.dataUri, "data_url")
+                .then(function(snapshot) {
+                  console.log("upload a file!");
+                });
+            });
+            toast.setMessage("Excel file succesfully uploaded!");
+          }
+          toast.present();
+        })
+        .then(function() {
+          rowNumber = rowNumber + 1;
+        });
     }
   }
 
@@ -171,7 +230,5 @@ export class HomePage {
       this.read(bstr);
     };
     reader.readAsBinaryString(target.files[0]);
-    toast.setMessage("Excel file succesfully uploaded!");
-    toast.present();
   }
 }

@@ -6,11 +6,12 @@ import { SplashScreen } from "@ionic-native/splash-screen";
 import { HomePage } from "../pages/home/home";
 import { LoginPage } from "../pages/login/login";
 import { AngularFireAuth } from "@angular/fire/auth";
+import { TabsPage } from "../pages/tabs/tabs";
 @Component({
   templateUrl: "app.html"
 })
 export class MyApp {
-  rootPage: any = LoginPage;
+  rootPage: any = TabsPage;
 
   constructor(
     platform: Platform,
@@ -20,7 +21,7 @@ export class MyApp {
   ) {
     const authObserver = afAuth.authState.subscribe(users => {
       if (users) {
-        this.rootPage = HomePage;
+        this.rootPage = TabsPage;
         authObserver.unsubscribe();
       } else {
         this.rootPage = LoginPage;
