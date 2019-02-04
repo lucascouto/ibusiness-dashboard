@@ -1,30 +1,38 @@
-import { Component, ViewChild, OnInit } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { NavController, ToastController } from "ionic-angular";
 
+/* IMPORTS TO WORK WITH FIREBASE */
 import { AngularFireDatabase } from "@angular/fire/database";
 import {
   AngularFirestore,
   AngularFirestoreCollection
 } from "angularfire2/firestore";
-
 import * as firebase from "firebase";
-import { LoginPage } from "../login/login";
+
+/* IMPORT TO WORK WITH EXCEL FILE */
+import * as XLSX from "xlsx";
+type AOA = any[][];
+
+/* IMPORT TO CONVERT URL IMAGE TO BASE64 BINARY */
+var imageToBinary = require("imageurl-base64");
 
 @Component({
   selector: "page-home",
   templateUrl: "home.html"
 })
-export class HomePage implements OnInit {
+export class HomePage {
+  dataExcel: any[][];
   barcode_found: AngularFirestoreCollection;
   userDoc: any;
+  collection = this.fireStore.collection<any>("products");
+  storage = firebase.storage().ref();
 
   @ViewChild("barcode") barcode;
   @ViewChild("description") description;
   @ViewChild("name") name;
+  @ViewChild("excelFile") excelFile;
 
   file: File = null;
-
-  ngOnInit() {}
 
   handleFileInput(files: FileList) {
     if (files.length != 0) {
@@ -49,8 +57,10 @@ export class HomePage implements OnInit {
     - "BARCODES/{barcode}.jpg" PATH
     - COLLECTION
     */
-    var storage = firebase.storage().ref();
-    var barcodeImage = storage.child("barcodes/" + this.barcode.value + ".jpg");
+
+    var barcodeImage = this.storage.child(
+      "barcodes/" + this.barcode.value + ".jpg"
+    );
     let collection = this.fireStore.collection<any>("products");
 
     var barcode = this.barcode;
@@ -114,7 +124,54 @@ export class HomePage implements OnInit {
     }
   }
 
-  logout() {
-    this.navCtrl.setRoot(LoginPage);
+  read(bstr: string) {
+    /* read workbook */
+    const wb: XLSX.WorkBook = XLSX.read(bstr, { type: "binary" });
+
+    /* grab first sheet */
+    const wsname: string = wb.SheetNames[0];
+    const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+    let storage = firebase.storage().ref();
+
+    /* save data */
+    this.dataExcel = <AOA>XLSX.utils.sheet_to_json(ws, { header: 1 });
+    console.log(this.dataExcel);
+    for (let row of this.dataExcel) {
+      this.collection.add({
+        barcode: row[0],
+        name: row[1],
+        description: row[2]
+      });
+      console.log(row[3]);
+      imageToBinary(row[3], function(err, data) {
+        if (data != undefined) {
+          console.log(data);
+          storage
+            .child("barcodes/" + row[0] + ".jpg")
+            .putString(data.dataUri, "data_url")
+            .then(function(snapshot) {
+              console.log("upload a file!");
+            });
+        } else {
+        }
+      });
+    }
+  }
+
+  /* File Input element for browser */
+  onFileChange(evt: any) {
+    let toast = this.toastCtrl.create({ duration: 3000, position: "bottom" });
+    /* wire up file reader */
+    const target: DataTransfer = <DataTransfer>evt.target;
+    this.excelFile = target.files[0];
+    //if (target.files.length !== 1) throw new Error("Cannot use multiple files");
+    const reader: FileReader = new FileReader();
+    reader.onload = (e: any) => {
+      const bstr: string = e.target.result;
+      this.read(bstr);
+    };
+    reader.readAsBinaryString(target.files[0]);
+    toast.setMessage("Excel file succesfully uploaded!");
+    toast.present();
   }
 }

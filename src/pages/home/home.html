@@ -31,4 +31,17 @@
       <button ion-button block (click)="register()">Upload</button>
     </ion-card-content>
   </ion-card>
+
+  <ion-card>
+    <ion-card-content>
+      <ion-item>
+        <input
+          accept=".xlsx"
+          type="file"
+          (change)="onFileChange($event)"
+          #excelFile
+        />
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
