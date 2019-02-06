@@ -11,6 +11,11 @@ import * as firebase from "firebase";
 
 /* IMPORT TO WORK WITH EXCEL FILE */
 import * as XLSX from "xlsx";
+import { AngularFireAuth } from "@angular/fire/auth";
+import { LoginPage } from "../login/login";
+
+import $ from "jquery";
+
 type AOA = any[][];
 
 /* IMPORT TO CONVERT URL IMAGE TO BASE64 BINARY */
@@ -44,7 +49,8 @@ export class HomePage {
     public navCtrl: NavController,
     public afDB: AngularFireDatabase,
     public fireStore: AngularFirestore,
-    public toastCtrl: ToastController
+    public toastCtrl: ToastController,
+    public fireAuth: AngularFireAuth
   ) {}
 
   register() {
@@ -219,7 +225,6 @@ export class HomePage {
 
   /* File Input element for browser */
   onFileChange(evt: any) {
-    let toast = this.toastCtrl.create({ duration: 3000, position: "bottom" });
     /* wire up file reader */
     const target: DataTransfer = <DataTransfer>evt.target;
     this.excelFile = target.files[0];
@@ -230,5 +235,13 @@ export class HomePage {
       this.read(bstr);
     };
     reader.readAsBinaryString(target.files[0]);
+  }
+
+  logoutApp() {
+    $(".tabbar").hide();
+
+    this.fireAuth.auth.signOut().then(data => {
+      this.navCtrl.setRoot(LoginPage);
+    });
   }
 }

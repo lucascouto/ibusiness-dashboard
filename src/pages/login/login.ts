@@ -6,14 +6,7 @@ import {
   ToastController
 } from "ionic-angular";
 import { AngularFireAuth } from "@angular/fire/auth";
-import { HomePage } from "../home/home";
-
-/**
- * Generated class for the LoginPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { TabsPage } from "../tabs/tabs";
 
 @IonicPage()
 @Component({
@@ -37,7 +30,7 @@ export class LoginPage {
       .signInWithEmailAndPassword(this.user.value, this.password.value)
       .then(data => {
         console.log("login data: ", data);
-        this.navCtrl.setRoot(HomePage);
+        this.navCtrl.setRoot(TabsPage);
       })
       .catch((error: any) => {
         console.log("error = ", error);

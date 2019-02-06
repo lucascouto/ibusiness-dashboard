@@ -34,6 +34,7 @@
     "imageurl-base64": "^1.0.0",
     "ionic-angular": "3.9.2",
     "ionicons": "3.0.0",
+    "jquery": "^3.3.1",
     "promise-polyfill": "^8.1.0",
     "rxjs": "^6.3.3",
     "rxjs-compat": "^6.3.3",
@@ -43,6 +44,7 @@
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.2.1",
+    "@types/jquery": "^3.3.29",
     "typescript": "~2.6.2"
   },
   "description": "An Ionic project",
