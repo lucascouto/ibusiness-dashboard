@@ -160,7 +160,7 @@ export class HomePage {
             console.log(
               "The product with the barcode",
               row[0],
-              "in the line",
+              "in the row",
               rowNumber,
               "already exists"
             );

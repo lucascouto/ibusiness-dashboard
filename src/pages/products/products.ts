@@ -11,6 +11,7 @@ import { Observable } from "rxjs";
 import { UpdateProductPage } from "../update-product/update-product";
 
 import { Product } from "./products.model";
+import * as firebase from "firebase";
 
 @IonicPage()
 @Component({
@@ -19,7 +20,7 @@ import { Product } from "./products.model";
 })
 export class ProductsPage {
   productsArray = [];
-  //storage = firebase.storage().ref();
+  storage = firebase.storage().ref();
   img: HTMLImageElement;
 
   products: Observable<Product[]>;
@@ -56,6 +57,16 @@ export class ProductsPage {
   getItems(event: any) {}
 
   deleteProduct(product: Product) {
+    var deleteRef = this.storage.child("barcodes/" + product.barcode + ".jpg");
+    deleteRef
+      .delete()
+      .then(function() {
+        console.log("Image ", product.barcode, "deleted!");
+      })
+      .catch(function(error) {
+        console.log("Error deleting image ", product.barcode);
+      });
+
     this.productsCollectionRef = this.fireStore.collection("products", ref =>
       ref.where("barcode", "==", product.barcode)
     );
