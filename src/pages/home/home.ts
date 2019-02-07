@@ -57,13 +57,6 @@ export class HomePage {
     //SET TOAST FOR SHOWING MESSAGE
     let toast = this.toastCtrl.create({ duration: 3000, position: "bottom" });
 
-    /*
-    CREATE A REFERENCE TO:
-    - THE STORAGE 
-    - "BARCODES/{barcode}.jpg" PATH
-    - COLLECTION
-    */
-
     var barcodeImage = this.storage.child(
       "barcodes/" + this.barcode.value + ".jpg"
     );
@@ -74,60 +67,52 @@ export class HomePage {
     var name = this.name;
     var file = this.file;
 
-    if (file == null) {
-      toast.setMessage("Please add a file!");
-      toast.present();
-    } else if (
-      barcode.value == "" ||
-      name.value == "" ||
-      description.value == ""
-    ) {
-      toast.setMessage("All the fields are required!");
-      toast.present();
-    } else {
-      //CHECKS IF THE BARCODE ALREADY EXISTS
-      this.barcode_found = this.fireStore.collection("products", ref =>
-        ref.where("barcode", "==", this.barcode.value)
-      );
-      this.barcode_found
-        .get()
-        .toPromise()
-        .then(function(querySnapshot) {
-          if (querySnapshot.empty) {
-            console.log("THIS IS A NEW CODE!");
-
-            //IF A NEW CODE, ADDS INFO TO THE COLLECTION
-            collection
-              .add({
-                barcode: barcode.value,
-                description: description.value,
-                name: name.value
-              })
-              .then(docRef => {
-                console.log(docRef);
-              })
-              .catch(error => {
-                console.log(error);
-              });
-
-            //AND UPLOADS THE PICTURE
-            barcodeImage.put(file).then(function(snapshot) {
-              console.log("upload a file!");
+    this.barcode_found = this.fireStore.collection("products", ref =>
+      ref.where("barcode", "==", parseInt(this.barcode.value))
+    );
+    this.barcode_found
+      .get()
+      .toPromise()
+      .then(function(querySnapshot) {
+        //VERIFIES IF THE BARCODE ALREADY EXISTS
+        //NOTE: HERE WE CAN VALIDATE THE FORMAT OF THE BARCODE
+        if (barcode.value == "")
+          toast.setMessage("Please, enter a valid barcode!");
+        else if (!querySnapshot.empty)
+          toast.setMessage("This barcode already exists!");
+        //VERIFIES IF ANY FIELD IS EMPTY
+        else if (description.value == "" || name.value == "")
+          toast.setMessage("All the fields are required!");
+        //VERIFIES IF THERE IS A FILE SELECTED
+        else if (file == null) toast.setMessage("Please, add a file!");
+        //IF EVERYTHING IS OK, UPLOAD THE PRODUCT
+        else {
+          collection
+            .add({
+              barcode: parseInt(barcode.value),
+              description: description.value,
+              name: name.value
+            })
+            .then(docRef => {
+              console.log(docRef);
+            })
+            .catch(error => {
+              console.log(error);
             });
 
-            toast.setMessage("succesfully uploaded!");
+          barcodeImage.put(file).then(function(snapshot) {
+            console.log("upload a file!");
+          });
 
-            //CLEARS THE FORM
-            barcode.value = "";
-            name.value = "";
-            description.value = "";
-          } else {
-            console.log("THIS IS CODE ALREADY EXISTS!");
-            toast.setMessage("This product already exists!");
-          }
-          toast.present();
-        });
-    }
+          toast.setMessage("succesfully uploaded!");
+
+          //CLEARS THE FORM
+          barcode.value = "";
+          name.value = "";
+          description.value = "";
+        }
+        toast.present();
+      });
   }
 
   read(bstr: string) {
