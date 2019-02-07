@@ -15,7 +15,7 @@
       <h2>{{ product.name }}</h2>
       <p><strong>Barcode:</strong> {{ product.barcode }}</p>
       <p><strong>Description:</strong> {{ product.description }}</p>
-      <button ion-button color="danger" (click)="deleteProduct(product)">
+      <button ion-button color="danger" (click)="confirmDelete(product)">
         Delete
       </button>
       <button ion-button (click)="editProduct(product)">Edit</button>

@@ -1,5 +1,10 @@
 import { Component } from "@angular/core";
-import { IonicPage, NavController, NavParams } from "ionic-angular";
+import {
+  IonicPage,
+  NavController,
+  NavParams,
+  AlertController
+} from "ionic-angular";
 import { AngularFireAuth } from "@angular/fire/auth";
 import { LoginPage } from "../login/login";
 import $ from "jquery";
@@ -29,7 +34,8 @@ export class ProductsPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public fireAuth: AngularFireAuth,
-    public fireStore: AngularFirestore
+    public fireStore: AngularFirestore,
+    public alertCtrl: AlertController
   ) {
     //var storage = this.storage;
     this.productsCollectionRef = this.fireStore.collection("products");
@@ -80,6 +86,30 @@ export class ProductsPage {
         });
       });
     console.log(product.barcode);
+  }
+
+  confirmDelete(product: Product) {
+    const confirm = this.alertCtrl.create({
+      title: "Delete product?",
+      message: "Are you sure you want to delete this product?",
+      buttons: [
+        {
+          text: "cancel",
+          handler: () => {
+            console.log("Delete canceled...");
+          }
+        },
+        {
+          text: "delete",
+          handler: () => {
+            this.deleteProduct(product);
+            console.log("Product deleted!");
+          },
+          cssClass: "delete-button"
+        }
+      ]
+    });
+    confirm.present();
   }
 
   editProduct(product: Product) {
