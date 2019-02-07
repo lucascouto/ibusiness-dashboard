@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>iBusiness Dashboard</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-card>
+    <ion-card-header style="text-align:center;font-size:25px;"
+      >Edit Product</ion-card-header
+    >
+    <ion-card-content>
+      <ion-item>
+        <ion-label stacked>Barcode: </ion-label>
+        <ion-input type="number" value="{{ product.barcode }}" #barcode>
+          }}</ion-input
+        >
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Name: </ion-label>
+        <ion-input type="text" value="{{ product.name }}" #name></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Description: </ion-label>
+        <ion-input
+          type="text"
+          value="{{ product.description }}"
+          #description
+        ></ion-input>
+      </ion-item>
+      <ion-buttons end>
+        <button ion-button color="danger" (click)="cancelUpdate()">
+          Cancel
+        </button>
+        <button ion-button (click)="updateProduct(product)">Update</button>
+      </ion-buttons>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

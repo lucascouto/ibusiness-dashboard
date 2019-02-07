@@ -8,12 +8,9 @@ import {
   AngularFirestoreCollection
 } from "angularfire2/firestore";
 import { Observable } from "rxjs";
+import { UpdateProductPage } from "../update-product/update-product";
 
-interface Product {
-  barcode: string;
-  name: string;
-  description: string;
-}
+import { Product } from "./products.model";
 
 @IonicPage()
 @Component({
@@ -21,7 +18,10 @@ interface Product {
   templateUrl: "products.html"
 })
 export class ProductsPage {
-  items = [];
+  productsArray = [];
+  //storage = firebase.storage().ref();
+  img: HTMLImageElement;
+
   products: Observable<Product[]>;
   productsCollectionRef: AngularFirestoreCollection<Product>;
   constructor(
@@ -30,20 +30,49 @@ export class ProductsPage {
     public fireAuth: AngularFireAuth,
     public fireStore: AngularFirestore
   ) {
+    //var storage = this.storage;
     this.productsCollectionRef = this.fireStore.collection("products");
     this.products = this.productsCollectionRef.valueChanges();
+    /*
+    this.products.forEach(function(product) {
+      product.forEach(singleProduct => {
+        console.log(singleProduct["barcode"]);
+        storage
+          .child("barcodes/" + singleProduct["barcode"] + ".jpg")
+          .getDownloadURL()
+          .then(function(url) {
+            var img = <HTMLImageElement>document.getElementById("productImage");
+            img.src = url;
+          });
+      });
+    });
+    */
   }
 
   ionViewDidLoad() {
     console.log("ionViewDidLoad ProductsPage");
-    console.log(this.products);
   }
 
-  getItems(event: any) {
-    const value = event.target.value;
+  getItems(event: any) {}
 
-    if (value && value.trim() != "") {
-    }
+  deleteProduct(product: Product) {
+    this.productsCollectionRef = this.fireStore.collection("products", ref =>
+      ref.where("barcode", "==", product.barcode)
+    );
+    var productsCollection = this.productsCollectionRef;
+    this.productsCollectionRef
+      .get()
+      .toPromise()
+      .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          productsCollection.doc(doc.id).delete();
+        });
+      });
+    console.log(product.barcode);
+  }
+
+  editProduct(product: Product) {
+    this.navCtrl.push(UpdateProductPage, { data: product });
   }
 
   logoutApp() {

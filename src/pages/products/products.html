@@ -11,9 +11,14 @@
   <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
   <ion-list>
     <ion-item *ngFor="let product of (products | async)">
+      <!--<img id="productImage" src="" alt="Product Image" />-->
       <h2>{{ product.name }}</h2>
       <p><strong>Barcode:</strong> {{ product.barcode }}</p>
       <p><strong>Description:</strong> {{ product.description }}</p>
+      <button ion-button color="danger" (click)="deleteProduct(product)">
+        Delete
+      </button>
+      <button ion-button (click)="editProduct(product)">Edit</button>
     </ion-item>
   </ion-list>
 </ion-content>

@@ -9,6 +9,7 @@ import { StatusBar } from "@ionic-native/status-bar";
 import { MyApp } from "./app.component";
 import { HomePage } from "../pages/home/home";
 import { LoginPage } from "../pages/login/login";
+import { UpdateProductPage } from "../pages/update-product/update-product";
 
 /* IMPORT ANGULARFIRE MODULES */
 import { AngularFireModule } from "@angular/fire";
@@ -34,7 +35,14 @@ export const firebaseConfig = {
 };
 
 @NgModule({
-  declarations: [MyApp, HomePage, LoginPage, ProductsPage, TabsPage],
+  declarations: [
+    MyApp,
+    HomePage,
+    LoginPage,
+    ProductsPage,
+    TabsPage,
+    UpdateProductPage
+  ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
@@ -45,7 +53,14 @@ export const firebaseConfig = {
     FormsModule
   ],
   bootstrap: [IonicApp],
-  entryComponents: [MyApp, HomePage, LoginPage, ProductsPage, TabsPage],
+  entryComponents: [
+    MyApp,
+    HomePage,
+    LoginPage,
+    ProductsPage,
+    TabsPage,
+    UpdateProductPage
+  ],
   providers: [
     StatusBar,
     SplashScreen,
