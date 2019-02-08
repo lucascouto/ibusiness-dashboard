@@ -127,7 +127,15 @@ export class HomePage {
   }
 
   read(bstr: string) {
-    let toast = this.toastCtrl.create({ duration: 3000, position: "bottom" });
+    let errorMessage: string = "";
+
+    let toast = this.toastCtrl;
+    let toastFailure = toast.create({
+      position: "bottom",
+      cssClass: "toastStyleDanger",
+      showCloseButton: true,
+      closeButtonText: "OK"
+    });
 
     let collection = this.collection;
 
@@ -153,45 +161,31 @@ export class HomePage {
         .then(function(querySnapshot) {
           //CHECKS THE BARCODE!
           if (!querySnapshot.empty) {
-            console.log(
-              "The product with the barcode",
-              row[0],
-              "in the row",
-              rowNumber,
-              "already exists"
-            );
-            toast.setMessage(
-              "The file was not uploaded... Please, check the log!"
-            );
+            errorMessage +=
+              "- The product with the barcode " +
+              row[0] +
+              " in the row " +
+              rowNumber +
+              " already exists\n\n";
           }
           //THEN, CHECKS IF THE NAME IS EMPTY
           else if (row[1] == undefined) {
-            console.log("The product name in row ", rowNumber, "is empty!");
-            toast.setMessage(
-              "The file was not uploaded... Please, check the log!"
-            );
+            errorMessage +=
+              "- The product name in row " + rowNumber + " is empty!\n\n";
           }
           //THEN CHECKS IF THE DESCRIPTION IS EMPTY
           else if (row[2] == undefined) {
-            console.log(
-              "The product description in row ",
-              rowNumber,
-              "is empty!"
-            );
-            toast.setMessage(
-              "The file was not uploaded... Please, check the log!"
-            );
+            errorMessage +=
+              "- The product description in row " +
+              rowNumber +
+              " is empty!\n\n";
           }
           //THEN CHECKS IF THE IMAGE LINK EXISTS
           else if (row[3] == undefined) {
-            console.log(
-              "The product in row ",
-              rowNumber,
-              "doesn't have a link to an image!"
-            );
-            toast.setMessage(
-              "The file was not uploaded... Please, check the log!"
-            );
+            errorMessage +=
+              "- The product in row " +
+              rowNumber +
+              " doesn't have a link to an image!\n\n";
           }
           //IF EVERYTHING IS OKAY, UPLOAD THE EXCEL FILE
           else {
@@ -209,9 +203,16 @@ export class HomePage {
                   console.log("upload a file!");
                 });
             });
-            toast.setMessage("Excel file succesfully uploaded!");
+            let toastSuccess = toast.create({
+              duration: 3000,
+              position: "bottom",
+              cssClass: "toastStyleSuccess"
+            });
+            toastSuccess.setMessage("Excel file succesfully uploaded!");
+            toastSuccess.present();
           }
-          toast.present();
+          toastFailure.setMessage(errorMessage);
+          toastFailure.present();
         })
         .then(function() {
           rowNumber = rowNumber + 1;
