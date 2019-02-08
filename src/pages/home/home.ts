@@ -54,8 +54,13 @@ export class HomePage {
   ) {}
 
   register() {
+    let toast = this.toastCtrl;
     //SET TOAST FOR SHOWING MESSAGE
-    let toast = this.toastCtrl.create({ duration: 3000, position: "bottom" });
+    let toastFailure = toast.create({
+      duration: 3000,
+      position: "bottom",
+      cssClass: "toastStyleDanger"
+    });
 
     var barcodeImage = this.storage.child(
       "barcodes/" + this.barcode.value + ".jpg"
@@ -77,14 +82,14 @@ export class HomePage {
         //VERIFIES IF THE BARCODE ALREADY EXISTS
         //NOTE: HERE WE CAN VALIDATE THE FORMAT OF THE BARCODE
         if (barcode.value == "")
-          toast.setMessage("Please, enter a valid barcode!");
+          toastFailure.setMessage("Please, enter a valid barcode!");
         else if (!querySnapshot.empty)
-          toast.setMessage("This barcode already exists!");
+          toastFailure.setMessage("This barcode already exists!");
         //VERIFIES IF ANY FIELD IS EMPTY
         else if (description.value == "" || name.value == "")
-          toast.setMessage("All the fields are required!");
+          toastFailure.setMessage("All the fields are required!");
         //VERIFIES IF THERE IS A FILE SELECTED
-        else if (file == null) toast.setMessage("Please, add a file!");
+        else if (file == null) toastFailure.setMessage("Please, add a file!");
         //IF EVERYTHING IS OK, UPLOAD THE PRODUCT
         else {
           collection
@@ -104,14 +109,20 @@ export class HomePage {
             console.log("upload a file!");
           });
 
-          toast.setMessage("succesfully uploaded!");
+          let toastSucess = toast.create({
+            duration: 3000,
+            position: "bottom",
+            cssClass: "toastStyleSuccess"
+          });
+          toastSucess.setMessage("succesfully uploaded!");
+          toastSucess.present();
 
           //CLEARS THE FORM
           barcode.value = "";
           name.value = "";
           description.value = "";
         }
-        toast.present();
+        toastFailure.present();
       });
   }
 
