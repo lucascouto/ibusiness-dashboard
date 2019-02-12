@@ -11,13 +11,6 @@ import {
   AngularFirestoreCollection
 } from "angularfire2/firestore";
 
-/**
- * Generated class for the UpdateProductPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: "page-update-product",

@@ -17,6 +17,7 @@
         <ion-label stacked>Barcode: </ion-label>
         <ion-input type="number" #barcode></ion-input>
       </ion-item>
+      <!--<button ion-button (click)="readBarcode()">Scan Product</button>-->
       <ion-item>
         <ion-label stacked>Name: </ion-label>
         <ion-input type="text" #name></ion-input>
@@ -31,11 +32,11 @@
           type="file"
           #picture
           (change)="handleFileInput($event.target.files)"
-          class="hidden"
+          id="productPicture"
         ></ion-input>
       </ion-item>
 
-      <button ion-button block (click)="register()">Upload</button>
+      <button ion-button block (click)="registerProduct()">Upload</button>
     </ion-card-content>
   </ion-card>
 
@@ -46,6 +47,7 @@
     <ion-card-content>
       <ion-item>
         <input
+          id="excelFile"
           accept=".xlsx"
           type="file"
           (change)="onFileChange($event)"

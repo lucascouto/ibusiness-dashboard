@@ -1,8 +1,8 @@
 import { Component, ViewChild } from "@angular/core";
-import { NavController, ToastController } from "ionic-angular";
+import { NavController, ToastController, NavParams } from "ionic-angular";
+import { BarcodeScanner } from "@ionic-native/barcode-scanner";
 
 /* IMPORTS TO WORK WITH FIREBASE */
-import { AngularFireDatabase } from "@angular/fire/database";
 import {
   AngularFirestore,
   AngularFirestoreCollection
@@ -15,6 +15,7 @@ import { AngularFireAuth } from "@angular/fire/auth";
 import { LoginPage } from "../login/login";
 
 import $ from "jquery";
+import { StorageProvider } from "../../providers/storage/storage";
 
 type AOA = any[][];
 
@@ -23,14 +24,13 @@ var imageToBinary = require("imageurl-base64");
 
 @Component({
   selector: "page-home",
-  templateUrl: "home.html"
+  templateUrl: "home.html",
+  providers: [StorageProvider]
 })
 export class HomePage {
   dataExcel: any[][];
   barcode_found: AngularFirestoreCollection;
-  userDoc: any;
   collection = this.fireStore.collection<any>("products");
-  storage = firebase.storage().ref();
 
   @ViewChild("barcode") barcode;
   @ViewChild("description") description;
@@ -47,82 +47,21 @@ export class HomePage {
 
   constructor(
     public navCtrl: NavController,
-    public afDB: AngularFireDatabase,
     public fireStore: AngularFirestore,
     public toastCtrl: ToastController,
-    public fireAuth: AngularFireAuth
+    public fireAuth: AngularFireAuth,
+    public navParams: NavParams,
+    private barcodeScanner: BarcodeScanner,
+    public storage: StorageProvider
   ) {}
 
-  register() {
-    let toast = this.toastCtrl;
-    //SET TOAST FOR SHOWING MESSAGE
-    let toastFailure = toast.create({
-      duration: 3000,
-      position: "bottom",
-      cssClass: "toastStyleDanger"
-    });
-
-    var barcodeImage = this.storage.child(
-      "barcodes/" + this.barcode.value + ".jpg"
-    );
-    let collection = this.fireStore.collection<any>("products");
-
-    var barcode = this.barcode;
-    var description = this.description;
-    var name = this.name;
-    var file = this.file;
-
-    this.barcode_found = this.fireStore.collection("products", ref =>
-      ref.where("barcode", "==", parseInt(this.barcode.value))
-    );
-    this.barcode_found
-      .get()
-      .toPromise()
-      .then(function(querySnapshot) {
-        //VERIFIES IF THE BARCODE ALREADY EXISTS
-        //NOTE: HERE WE CAN VALIDATE THE FORMAT OF THE BARCODE
-        if (barcode.value == "")
-          toastFailure.setMessage("Please, enter a valid barcode!");
-        else if (!querySnapshot.empty)
-          toastFailure.setMessage("This barcode already exists!");
-        //VERIFIES IF ANY FIELD IS EMPTY
-        else if (description.value == "" || name.value == "")
-          toastFailure.setMessage("All the fields are required!");
-        //VERIFIES IF THERE IS A FILE SELECTED
-        else if (file == null) toastFailure.setMessage("Please, add a file!");
-        //IF EVERYTHING IS OK, UPLOAD THE PRODUCT
-        else {
-          collection
-            .add({
-              barcode: parseInt(barcode.value),
-              description: description.value,
-              name: name.value
-            })
-            .then(docRef => {
-              console.log(docRef);
-            })
-            .catch(error => {
-              console.log(error);
-            });
-
-          barcodeImage.put(file).then(function(snapshot) {
-            console.log("upload a file!");
-          });
-
-          let toastSucess = toast.create({
-            duration: 3000,
-            position: "bottom",
-            cssClass: "toastStyleSuccess"
-          });
-          toastSucess.setMessage("succesfully uploaded!");
-          toastSucess.present();
-
-          //CLEARS THE FORM
-          barcode.value = "";
-          name.value = "";
-          description.value = "";
-        }
-        toastFailure.present();
+  registerProduct() {
+    var toast = this.toastCtrl.create({ duration: 3000, position: "bottom" });
+    this.storage
+      .uploadProduct(this.barcode, this.description, this.name, this.file)
+      .then(message => {
+        toast.setMessage(message);
+        toast.present();
       });
   }
 
@@ -224,14 +163,29 @@ export class HomePage {
   onFileChange(evt: any) {
     /* wire up file reader */
     const target: DataTransfer = <DataTransfer>evt.target;
+    console.log("Before get excel file");
     this.excelFile = target.files[0];
+    console.log("After get excel file");
+
     //if (target.files.length !== 1) throw new Error("Cannot use multiple files");
     const reader: FileReader = new FileReader();
     reader.onload = (e: any) => {
       const bstr: string = e.target.result;
       this.read(bstr);
     };
-    reader.readAsBinaryString(target.files[0]);
+    if (target.files[0] != undefined)
+      reader.readAsBinaryString(target.files[0]);
+  }
+
+  readBarcode() {
+    this.barcodeScanner
+      .scan()
+      .then(barcodeData => {
+        console.log("Barcode data", barcodeData);
+      })
+      .catch(err => {
+        console.log("Error", err);
+      });
   }
 
   logoutApp() {

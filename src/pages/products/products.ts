@@ -24,9 +24,7 @@ import * as firebase from "firebase";
   templateUrl: "products.html"
 })
 export class ProductsPage {
-  productsArray = [];
   storage = firebase.storage().ref();
-  img: HTMLImageElement;
 
   products: Observable<Product[]>;
   productsCollectionRef: AngularFirestoreCollection<Product>;
@@ -37,27 +35,8 @@ export class ProductsPage {
     public fireStore: AngularFirestore,
     public alertCtrl: AlertController
   ) {
-    //var storage = this.storage;
     this.productsCollectionRef = this.fireStore.collection("products");
     this.products = this.productsCollectionRef.valueChanges();
-    /*
-    this.products.forEach(function(product) {
-      product.forEach(singleProduct => {
-        console.log(singleProduct["barcode"]);
-        storage
-          .child("barcodes/" + singleProduct["barcode"] + ".jpg")
-          .getDownloadURL()
-          .then(function(url) {
-            var img = <HTMLImageElement>document.getElementById("productImage");
-            img.src = url;
-          });
-      });
-    });
-    */
-  }
-
-  ionViewDidLoad() {
-    console.log("ionViewDidLoad ProductsPage");
   }
 
   getItems(event: any) {}

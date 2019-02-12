@@ -5,6 +5,8 @@ import { IonicApp, IonicErrorHandler, IonicModule } from "ionic-angular";
 import { SplashScreen } from "@ionic-native/splash-screen";
 import { StatusBar } from "@ionic-native/status-bar";
 
+import { BarcodeScanner } from "@ionic-native/barcode-scanner";
+
 /* IMPORT INTERNAL COMPONENTS */
 import { MyApp } from "./app.component";
 import { HomePage } from "../pages/home/home";
@@ -23,16 +25,8 @@ import { AngularFirestoreModule } from "angularfire2/firestore";
 import { FormsModule } from "@angular/forms";
 import { ProductsPage } from "../pages/products/products";
 import { TabsPage } from "../pages/tabs/tabs";
-
-/* ENVIROMENT VARIABLE TO FIREBASE INSTANCE */
-export const firebaseConfig = {
-  apiKey: "AIzaSyBthU9q7uf48uH3_P0pMDEThgbE98PR-DA",
-  authDomain: "ibusiness-test-fe6c7.firebaseapp.com",
-  databaseURL: "https://ibusiness-test-fe6c7.firebaseio.com",
-  projectId: "ibusiness-test-fe6c7",
-  storageBucket: "ibusiness-test-fe6c7.appspot.com",
-  messagingSenderId: "1001140091098"
-};
+import { StorageProvider } from "../providers/storage/storage";
+import { firebaseConfig } from "./firebase.config";
 
 @NgModule({
   declarations: [
@@ -65,7 +59,9 @@ export const firebaseConfig = {
     StatusBar,
     SplashScreen,
     AngularFireDatabase,
-    { provide: ErrorHandler, useClass: IonicErrorHandler }
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
+    BarcodeScanner,
+    StorageProvider
   ]
 })
 export class AppModule {}

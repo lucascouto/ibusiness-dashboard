@@ -12,6 +12,7 @@ log.txt
 .vscode/
 npm-debug.log*
 
+src/app/firebase.config.ts
 .idea/
 .ionic/
 .sourcemaps/
