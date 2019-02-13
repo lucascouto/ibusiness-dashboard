@@ -1,6 +1,9 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>iBusiness Dashboard</ion-title>
+    <ion-title>iBusiness Dashboard</ion-title
+    ><ion-buttons end>
+      <button ion-button clear (click)="logoutApp()">Logout</button>
+    </ion-buttons>
   </ion-navbar>
   <ion-toolbar no-border-top>
     <ion-segment [(ngModel)]="selected_user">
@@ -25,13 +28,30 @@
             </ion-card-header>
             <ion-card-content>
               <p><strong>VAT: </strong>{{ user.vatNumber }}</p>
-              <p><strong>Address: </strong>{{ user.address }}</p>
-              <p><strong>Municipality: </strong>{{ user.municipality }}</p>
-              <p><strong>Name: </strong>{{ user.name }}</p>
-              <p><strong>Surname: </strong>{{ user.surname }}</p>
-              <p><strong>E-mail: </strong>{{ user.email }}</p>
-              <p><strong>Phone Number: </strong>{{ user.phoneNumber }}</p>
-              <p><strong>Tax Office: </strong>{{ user.taxOffice }}</p>
+              <p>
+                <ion-icon name="home"></ion-icon> <strong>Address: </strong
+                >{{ user.address }}
+              </p>
+              <p>
+                <ion-icon name="home"></ion-icon> <strong>Municipality: </strong
+                >{{ user.municipality }}
+              </p>
+              <p>
+                <ion-icon name="person"></ion-icon> <strong>Name: </strong
+                >{{ user.name }} {{ user.surname }}
+              </p>
+              <p>
+                <ion-icon name="mail"></ion-icon> <strong>E-mail: </strong
+                >{{ user.email }}
+              </p>
+              <p>
+                <ion-icon name="call"></ion-icon> <strong>Phone Number: </strong
+                >{{ user.phoneNumber }}
+              </p>
+              <p>
+                <ion-icon name="briefcase"></ion-icon>
+                <strong>Tax Office: </strong>{{ user.taxOffice }}
+              </p>
             </ion-card-content>
           </ion-card>
         </div>
@@ -47,12 +67,26 @@
             </ion-card-header>
             <ion-card-content>
               <p><strong>VAT: </strong>{{ user.vatNumber }}</p>
-              <p><strong>Address: </strong>{{ user.address }}</p>
-              <p><strong>Name: </strong>{{ user.name }}</p>
-              <p><strong>Surname: </strong>{{ user.surname }}</p>
-              <p><strong>E-mail: </strong>{{ user.email }}</p>
-              <p><strong>Phone Number: </strong>{{ user.phoneNumber }}</p>
-              <p><strong>Tax Office: </strong>{{ user.taxOffice }}</p>
+              <p>
+                <ion-icon name="home"></ion-icon> <strong>Address: </strong
+                >{{ user.address }}
+              </p>
+              <p>
+                <ion-icon name="person"></ion-icon> <strong>Name: </strong
+                >{{ user.name }} {{ user.surname }}
+              </p>
+              <p>
+                <ion-icon name="mail"></ion-icon> <strong>E-mail: </strong
+                >{{ user.email }}
+              </p>
+              <p>
+                <ion-icon name="call"></ion-icon> <strong>Phone Number: </strong
+                >{{ user.phoneNumber }}
+              </p>
+              <p>
+                <ion-icon name="briefcase"></ion-icon>
+                <strong>Tax Office: </strong>{{ user.taxOffice }}
+              </p>
             </ion-card-content>
           </ion-card>
         </div>

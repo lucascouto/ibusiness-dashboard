@@ -28,6 +28,7 @@ import { TabsPage } from "../pages/tabs/tabs";
 import { StorageProvider } from "../providers/storage/storage";
 import { firebaseConfig } from "./firebase.config";
 import { UsersPage } from "../pages/users/users";
+import { RequestsPage } from "../pages/requests/requests";
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { UsersPage } from "../pages/users/users";
     ProductsPage,
     TabsPage,
     UpdateProductPage,
-    UsersPage
+    UsersPage,
+    RequestsPage
   ],
   imports: [
     BrowserModule,
@@ -56,7 +58,8 @@ import { UsersPage } from "../pages/users/users";
     ProductsPage,
     TabsPage,
     UpdateProductPage,
-    UsersPage
+    UsersPage,
+    RequestsPage
   ],
   providers: [
     StatusBar,

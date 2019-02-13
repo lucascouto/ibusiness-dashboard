@@ -1,0 +1,62 @@
+<!--
+  Generated template for the RequestsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <ion-title>iBusiness Dashboard</ion-title
+    ><ion-buttons end>
+      <button ion-button clear (click)="logoutApp()">Logout</button>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-toolbar no-border-top>
+    <ion-segment [(ngModel)]="request_type">
+      <ion-segment-button value="pending">
+        Pending
+      </ion-segment-button>
+      <ion-segment-button value="declined">
+        Declined
+      </ion-segment-button>
+      <ion-segment-button value="completed">
+        Completed
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <div [ngSwitch]="request_type">
+    <ion-list *ngSwitchCase="'pending'">
+      <div *ngFor="">
+        <div *ngIf="">
+          <ion-card>
+            <ion-card-header> </ion-card-header>
+            <ion-card-content> </ion-card-content>
+          </ion-card>
+        </div>
+      </div>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'declined'">
+      <div *ngFor="">
+        <div *ngIf="">
+          <ion-card>
+            <ion-card-header> </ion-card-header>
+            <ion-card-content> </ion-card-content>
+          </ion-card>
+        </div>
+      </div>
+    </ion-list>
+    <ion-list *ngSwitchCase="'completed'">
+      <div *ngFor="">
+        <div *ngIf="">
+          <ion-card>
+            <ion-card-header> </ion-card-header>
+            <ion-card-content> </ion-card-content>
+          </ion-card>
+        </div>
+      </div>
+    </ion-list></div
+></ion-content>
