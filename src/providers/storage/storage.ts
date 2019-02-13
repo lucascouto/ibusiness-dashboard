@@ -6,36 +6,23 @@ import {
 import { Product } from "../../pages/products/products.model";
 import { Users } from "../../pages/users/users.model";
 import * as firebase from "firebase";
-import { ToastController } from "ionic-angular";
+import { Observable } from "rxjs";
 
 @Injectable()
 export class StorageProvider {
   productsCollectionRef: AngularFirestoreCollection<Product>;
   usersCollectionRef: AngularFirestoreCollection<Users>;
+  users: Observable<Users[]>;
   storage: any = firebase.storage().ref();
 
   errorMessage: string;
   successMessage: string;
 
-  toastError: any;
-  toastSuccess: any;
-
-  constructor(
-    public fireStore: AngularFirestore,
-    public toastCtrl: ToastController
-  ) {
+  constructor(public fireStore: AngularFirestore) {
     this.productsCollectionRef = this.fireStore.collection("products");
     this.usersCollectionRef = this.fireStore.collection("users");
-    this.toastError = this.toastCtrl.create({
-      duration: 3000,
-      position: "bottom",
-      cssClass: "toastStyleError"
-    });
-    this.toastSuccess = this.toastCtrl.create({
-      duration: 3000,
-      position: "bottom",
-      cssClass: "toastStyleSuccess"
-    });
+
+    this.users = this.usersCollectionRef.valueChanges();
   }
 
   private barcodeExists(barcode: any) {

@@ -1,18 +1,62 @@
-<!--
-  Generated template for the UsersPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
   <ion-navbar>
-    <ion-title>users</ion-title>
+    <ion-title>iBusiness Dashboard</ion-title>
   </ion-navbar>
-
+  <ion-toolbar no-border-top>
+    <ion-segment [(ngModel)]="selected_user">
+      <ion-segment-button value="retailers">
+        Retailers
+      </ion-segment-button>
+      <ion-segment-button value="wholesalers">
+        Wholesalers
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
 
-
 <ion-content padding>
+  <div [ngSwitch]="selected_user">
+    <ion-list *ngSwitchCase="'retailers'">
+      <div *ngFor="let user of (users | async)">
+        <div *ngIf="user.role.retailer == true">
+          <ion-card>
+            <ion-card-header>
+              {{ user.company }}
+            </ion-card-header>
+            <ion-card-content>
+              <p><strong>VAT: </strong>{{ user.vatNumber }}</p>
+              <p><strong>Address: </strong>{{ user.address }}</p>
+              <p><strong>Municipality: </strong>{{ user.municipality }}</p>
+              <p><strong>Name: </strong>{{ user.name }}</p>
+              <p><strong>Surname: </strong>{{ user.surname }}</p>
+              <p><strong>E-mail: </strong>{{ user.email }}</p>
+              <p><strong>Phone Number: </strong>{{ user.phoneNumber }}</p>
+              <p><strong>Tax Office: </strong>{{ user.taxOffice }}</p>
+            </ion-card-content>
+          </ion-card>
+        </div>
+      </div>
+    </ion-list>
 
-</ion-content>
+    <ion-list *ngSwitchCase="'wholesalers'">
+      <div *ngFor="let user of (users | async)">
+        <div *ngIf="user.role.wholesaler == true">
+          <ion-card>
+            <ion-card-header>
+              {{ user.company }}
+            </ion-card-header>
+            <ion-card-content>
+              <p><strong>VAT: </strong>{{ user.vatNumber }}</p>
+              <p><strong>Address: </strong>{{ user.address }}</p>
+              <p><strong>Name: </strong>{{ user.name }}</p>
+              <p><strong>Surname: </strong>{{ user.surname }}</p>
+              <p><strong>E-mail: </strong>{{ user.email }}</p>
+              <p><strong>Phone Number: </strong>{{ user.phoneNumber }}</p>
+              <p><strong>Tax Office: </strong>{{ user.taxOffice }}</p>
+            </ion-card-content>
+          </ion-card>
+        </div>
+      </div>
+    </ion-list>
+  </div></ion-content
+>
