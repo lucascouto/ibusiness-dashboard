@@ -29,6 +29,7 @@ import { StorageProvider } from "../providers/storage/storage";
 import { firebaseConfig } from "./firebase.config";
 import { UsersPage } from "../pages/users/users";
 import { RequestsPage } from "../pages/requests/requests";
+import { AccordionComponent } from "../components/accordion/accordion";
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { RequestsPage } from "../pages/requests/requests";
     TabsPage,
     UpdateProductPage,
     UsersPage,
-    RequestsPage
+    RequestsPage,
+    AccordionComponent
   ],
   imports: [
     BrowserModule,

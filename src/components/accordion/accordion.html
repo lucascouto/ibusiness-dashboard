@@ -1,0 +1,18 @@
+<ion-card>
+  <ion-card-header *ngIf="bids != null" (click)="toggleAccordion()">
+    <ion-item color="">
+      <ion-icon color="primary" [name]="icon" item-right> </ion-icon>
+      <ng-content select="[accordion-header-bids]"></ng-content>
+    </ion-item>
+  </ion-card-header>
+
+  <ion-card-header *ngIf="bids == null">
+    <ion-item color="">
+      <ng-content select="[accordion-header]"></ng-content>
+    </ion-item>
+  </ion-card-header>
+
+  <ion-card-content #cardcontent>
+    <ng-content select="[accordion-body]"></ng-content>
+  </ion-card-content>
+</ion-card>

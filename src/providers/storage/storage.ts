@@ -7,12 +7,17 @@ import { Product } from "../../pages/products/products.model";
 import { Users } from "../../pages/users/users.model";
 import * as firebase from "firebase";
 import { Observable } from "rxjs";
+import { ProductRequest } from "../../pages/requests/requests.model";
 
 @Injectable()
 export class StorageProvider {
   productsCollectionRef: AngularFirestoreCollection<Product>;
   usersCollectionRef: AngularFirestoreCollection<Users>;
+  requestsCollectionRef: AngularFirestoreCollection<ProductRequest>;
+
   users: Observable<Users[]>;
+  requests: Observable<ProductRequest[]>;
+
   storage: any = firebase.storage().ref();
 
   errorMessage: string;
@@ -21,8 +26,10 @@ export class StorageProvider {
   constructor(public fireStore: AngularFirestore) {
     this.productsCollectionRef = this.fireStore.collection("products");
     this.usersCollectionRef = this.fireStore.collection("users");
+    this.requestsCollectionRef = this.fireStore.collection("requests");
 
     this.users = this.usersCollectionRef.valueChanges();
+    this.requests = this.requestsCollectionRef.valueChanges();
   }
 
   private barcodeExists(barcode: any) {
